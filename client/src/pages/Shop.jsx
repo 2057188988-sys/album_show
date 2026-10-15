@@ -241,7 +241,6 @@ function Interior({ owner, editable, genre, setGenre, wall, crates, onOpen, onAd
         <h3 className="section-title">墙上 · 我的精选</h3>
         {wall.length ? (
           <div className="wall-shelf">
-            <div className="shelf-board" />
             <div className="wall-cards">
               {wall.map((a) => (
                 <div className="wall-item" key={a.id}>
@@ -249,6 +248,7 @@ function Interior({ owner, editable, genre, setGenre, wall, crates, onOpen, onAd
                 </div>
               ))}
             </div>
+            <div className="shelf-board" />
           </div>
         ) : (
           <p className="empty">这个分类下还没有上墙的唱片</p>
@@ -260,8 +260,17 @@ function Interior({ owner, editable, genre, setGenre, wall, crates, onOpen, onAd
         {crates.length ? (
           <div className="crates">
             {crates.map((a) => (
-              <div className="crate-item" key={a.id}>
-                <AlbumCard album={a} onOpen={onOpen} />
+              <div className="crate" key={a.id}>
+                <div className="crate-box">
+                  <div className="crate-face crate-back" />
+                  <div className="crate-face crate-side left" />
+                  <div className="crate-face crate-side right" />
+                  <div className="crate-face crate-bottom" />
+                  <div className="crate-lp">
+                    <AlbumCard album={a} onOpen={onOpen} />
+                  </div>
+                  <div className="crate-face crate-front" />
+                </div>
               </div>
             ))}
           </div>
@@ -269,6 +278,8 @@ function Interior({ owner, editable, genre, setGenre, wall, crates, onOpen, onAd
           <p className="empty">箱子里还没有唱片{editable ? '，点右上角「添加专辑」开始收藏' : ''}</p>
         )}
       </section>
+
+      <div className="interior-floor" />
     </div>
   );
 }

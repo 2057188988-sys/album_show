@@ -13,6 +13,10 @@
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
   /* 水泥噪点纹理（灰度 feTurbulence，可平铺） */
   --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* 真实材质贴图（AI 生成无缝纹理） */
+  --tex-wall: url("/textures/concrete-wall.jpg");
+  --tex-wood: url("/textures/wood-shelf.jpg");
+  --tex-floor: url("/textures/concrete-floor.jpg");
 }
 
 * {
@@ -114,16 +118,13 @@ button {
   align-items: center;
   justify-content: center;
   position: relative;
-  background: linear-gradient(160deg, #a8a8a0, #7d7d75);
+  background: var(--tex-wall) center / 1100px auto;
 }
 .login-wrap::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: var(--noise);
-  background-size: 160px 160px;
-  opacity: 0.14;
-  mix-blend-mode: multiply;
+  background: radial-gradient(circle at 50% 42%, rgba(30, 30, 26, 0.18), rgba(20, 20, 17, 0.62));
 }
 .login-card {
   width: 360px;
@@ -236,18 +237,15 @@ button {
   align-items: center;
   justify-content: flex-start;
   overflow: hidden;
-  background: radial-gradient(circle at 12% 6%, rgba(255, 255, 255, 0.1), transparent 38%),
-    radial-gradient(circle at 86% 22%, rgba(0, 0, 0, 0.12), transparent 46%),
-    linear-gradient(170deg, #b9b9b1 0%, #a6a69e 48%, #8c8c84 100%);
+  background: var(--tex-wall) center / 1100px auto;
 }
 .storefront::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: var(--noise);
-  background-size: 160px 160px;
-  opacity: 0.2;
-  mix-blend-mode: multiply;
+  background:
+    radial-gradient(ellipse at 50% -8%, rgba(255, 252, 240, 0.14), transparent 55%),
+    radial-gradient(ellipse at 50% 118%, rgba(15, 15, 12, 0.42), transparent 62%);
   pointer-events: none;
 }
 
@@ -389,30 +387,35 @@ button {
   height: 130px;
   width: 100%;
   margin-top: auto;
-  background: linear-gradient(#9a9a92, #86867e);
-  border-top: 4px solid #c9c9c0;
-  box-shadow: inset 0 12px 16px rgba(0, 0, 0, 0.22);
+  background: var(--tex-floor) center / 700px auto;
   position: relative;
   z-index: 1;
+}
+.sidewalk::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent 34%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.24), transparent 40%);
 }
 
 /* ---- 店内：水泥墙 ---- */
 .interior {
   min-height: calc(100vh - 54px);
   margin-top: 54px;
-  padding: 24px 32px 60px;
+  padding: 24px 32px 0;
   position: relative;
-  background: radial-gradient(circle at 20% 8%, rgba(255, 255, 255, 0.08), transparent 42%),
-    linear-gradient(172deg, #b0b0a8, #8f8f87);
+  background: var(--tex-wall) center / 1100px auto;
 }
 .interior::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: var(--noise);
-  background-size: 160px 160px;
-  opacity: 0.17;
-  mix-blend-mode: multiply;
+  background:
+    radial-gradient(ellipse 42% 30% at 26% 30%, rgba(255, 246, 224, 0.13), transparent 70%),
+    radial-gradient(ellipse 42% 30% at 74% 30%, rgba(255, 246, 224, 0.13), transparent 70%),
+    radial-gradient(ellipse at 50% 116%, rgba(12, 12, 10, 0.5), transparent 58%);
   pointer-events: none;
 }
 .interior > * {
@@ -444,9 +447,10 @@ button {
 }
 .section-title {
   margin: 6px 0 14px;
-  color: var(--ink);
+  color: #3d3c35;
   font-size: 15px;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 .empty {
   color: var(--ink-soft);
@@ -456,103 +460,245 @@ button {
   border-radius: 8px;
 }
 
-/* 墙架（有厚度的木质货架） */
+/* 墙架（真实木纹货架 + 3D 唱片靠墙摆放） */
 .wall-section {
   margin-bottom: 38px;
 }
 .wall-shelf {
-  background: linear-gradient(180deg, #46463f, #2f2f2a);
-  padding: 12px 16px 18px;
-  border-radius: 5px;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(180deg, rgba(40, 39, 34, 0.5), rgba(28, 27, 23, 0.62));
+  padding: 20px 18px 0;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.42);
+}
+.wall-cards {
+  display: flex;
+  gap: 26px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  perspective: 1150px;
+  padding: 0 4px;
+}
+.wall-item {
+  position: relative;
+  width: 158px;
+}
+/* 每张唱片微微随机倾斜，像真人靠墙摆放 */
+.wall-item .album-card {
+  transform-style: preserve-3d;
+  transform: rotateY(-7deg);
+  transition: transform 0.2s;
+}
+.wall-item:nth-child(even) .album-card {
+  transform: rotateY(-3deg) translateY(2px);
+}
+.wall-item .album-card:hover {
+  transform: rotateY(-1deg) translateY(-6px);
+}
+/* 封面右缘的真 3D 厚度面（黑胶侧边） */
+.wall-item .album-cover {
+  transform-style: preserve-3d;
+}
+.wall-item .album-cover::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15px;
+  height: 100%;
+  transform-origin: left center;
+  transform: rotateY(-90deg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 20%),
+    repeating-linear-gradient(90deg, #16130e 0 4px, #2c271e 4px 6px);
+}
+/* 封面左上角小白贴纸 */
+.wall-item .album-cover::before {
+  content: "33⅓ RPM";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 3;
+  background: rgba(246, 243, 233, 0.92);
+  color: #45433b;
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  padding: 3px 6px;
+  border-radius: 2px;
+  transform: rotate(-4deg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 .shelf-board {
-  height: 16px;
-  background: linear-gradient(180deg, #a37f58, #6e5235);
-  border-radius: 3px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.35), inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  height: 18px;
+  background: var(--tex-wood) left top / 520px auto;
+  border-radius: 2px;
+  box-shadow:
+    0 10px 16px rgba(0, 0, 0, 0.5),
+    0 2px 3px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
   position: relative;
-  margin-bottom: 18px;
 }
 .shelf-board::after {
   content: "";
   position: absolute;
-  left: 3px;
-  right: 3px;
-  bottom: -6px;
-  height: 6px;
-  background: #584027;
-  border-radius: 0 0 3px 3px;
-}
-.wall-cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  align-items: flex-end;
-}
-.wall-item {
-  position: relative;
+  left: 2px;
+  right: 2px;
+  bottom: -7px;
+  height: 7px;
+  background: linear-gradient(180deg, #2e2114, #1c140c);
+  border-radius: 0 0 2px 2px;
 }
 
-/* 箱子（立体周转箱，唱片插在里面） */
+/* 箱子（真 3D 周转箱：后壁 + 左右壁 + 底 + 前壁，唱片插在箱内） */
 .crates {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 34px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 46px 42px;
+  perspective: 1050px;
+  padding-top: 26px;
 }
-.crate-item {
+.crate {
   position: relative;
-  padding-bottom: 12px;
 }
-.crate-item::before {
-  /* 箱体（侧壁包围，托盘高于唱片形成箱口） */
-  content: "";
+.crate-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.96;
+  transform-style: preserve-3d;
+  transform: rotateX(12deg);
+}
+.crate-face {
   position: absolute;
-  top: -14px;
+}
+/* 箱内后壁（俯视时露出箱口内侧） */
+.crate-back {
+  inset: 0;
+  transform: translateZ(-30px);
+  background: linear-gradient(180deg, #57574f, #3c3c36);
+  box-shadow: inset 0 16px 24px rgba(0, 0, 0, 0.5);
+}
+/* 左右壁（向箱内深度延伸） */
+.crate-side {
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(180deg, #808077, #5b5b53);
+}
+.crate-side.left {
+  left: 0;
+  transform-origin: left center;
+  transform: rotateY(90deg);
+}
+.crate-side.right {
+  right: 0;
+  transform-origin: right center;
+  transform: rotateY(-90deg);
+}
+/* 箱底 */
+.crate-bottom {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(180deg, #87877f, #9b9b92);
-  border: 4px solid #6a6a62;
-  border-top-width: 12px;
-  border-radius: 4px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 10px 16px rgba(0, 0, 0, 0.35);
-  z-index: 0;
+  height: 30px;
+  transform-origin: center bottom;
+  transform: rotateX(-90deg);
+  background: #2e2e29;
 }
-.crate-item::after {
-  /* 前壁下部：遮住唱片下半，形成「插在箱里」的感觉 */
-  content: "";
+/* 唱片插在箱里（hover 时从箱中抽出） */
+.crate-lp {
   position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: 10px;
-  height: 46%;
-  background: linear-gradient(180deg, #bcbcb3, #919188);
-  border: 3px solid #74746c;
-  border-radius: 3px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-  z-index: 2;
+  left: 7%;
+  right: 7%;
+  top: -15%;
+  bottom: 9%;
+  transform: translateZ(-8px);
+  transition: transform 0.25s ease-out;
 }
-.crate-item .album-card {
-  position: relative;
-  z-index: 1;
-  width: 86%;
-  margin: 0 auto;
+.crate:hover .crate-lp,
+.crate-lp:hover {
+  transform: translateZ(-2px) translateY(-16px) rotateY(-3deg);
 }
-.crate-item .album-meta {
+.crate-lp .album-cover::after {
+  width: 5px;
+  background: linear-gradient(180deg, #26221a, #100e0a);
+}
+.crate-lp .album-meta {
   display: none;
 }
+/* 前壁：遮住唱片下半，带箱口卷边和加强筋 */
+.crate-front {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 58%;
+  transform: translateZ(2px);
+  background: linear-gradient(180deg, #8e8e85 0%, #7d7d74 55%, #6f6f66 100%);
+  border: 3px solid #5d5d55;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -10px 16px rgba(0, 0, 0, 0.22),
+    0 16px 26px rgba(0, 0, 0, 0.45);
+}
+.crate-front::before {
+  /* 箱口卷边 */
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  top: -8px;
+  height: 8px;
+  background: linear-gradient(180deg, #a6a69c, #7d7d74);
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+.crate-front::after {
+  /* 塑料箱加强筋凹槽 */
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 18%;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.16);
+  border-radius: 3px;
+}
 
-/* ---- 专辑卡片（有厚度的唱片套） ---- */
+/* 店内地面（透视纹理，箱子踩在上面） */
+.interior-floor {
+  position: relative;
+  height: 240px;
+  margin: 52px -32px 0;
+  perspective: 430px;
+  overflow: hidden;
+}
+.interior-floor::before {
+  content: "";
+  position: absolute;
+  left: -14%;
+  right: -14%;
+  top: 0;
+  bottom: -42%;
+  background: var(--tex-floor) center / 860px auto;
+  transform: rotateX(36deg);
+  transform-origin: top center;
+}
+.interior-floor::after {
+  /* 墙地衔接阴影 */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 96px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.48), transparent);
+}
+
+/* ---- 专辑卡片（唱片套：transform 由摆放上下文控制） ---- */
 .album-card {
   cursor: pointer;
   width: 100%;
-  transform: perspective(700px) rotateY(-4deg);
-  transform-style: preserve-3d;
   transition: transform 0.18s;
-}
-.album-card:hover {
-  transform: perspective(700px) rotateY(-1deg) translateY(-3px);
 }
 .album-cover {
   position: relative;
