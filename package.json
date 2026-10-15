@@ -1,0 +1,15 @@
+{
+  "name": "album-show",
+  "private": true,
+  "version": "0.1.0",
+  "description": "个人唱片店 - 社交音乐品味展示",
+  "scripts": {
+    "install-all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently -n server,client -c blue,green \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "build": "npm --prefix client run build",
+    "start": "node server/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
