@@ -182,7 +182,10 @@ function Storefront({ owner, editable, wall, onEnter, onSaved }) {
 
   return (
     <div className="storefront">
-      <div className="neon-sign">
+      <div className="rooftop" />
+
+      <div className="signband">
+        <span className="sign-lamp" />
         {editable && editName ? (
           <input
             className="store-name-input"
@@ -201,17 +204,22 @@ function Storefront({ owner, editable, wall, onEnter, onSaved }) {
             {owner.store_name || 'fruityshop'}
           </span>
         )}
-        <span className="light-tube" />
       </div>
 
       <div className="facade">
-        <div className="window-panel left" />
+        <div className="window-panel left">
+          <img className="poster" src="/textures/poster.jpg" alt="" />
+        </div>
 
         <button className="glass-door" onClick={onEnter}>
+          <span className="door-handle left" />
+          <span className="door-handle right" />
           <div className="door-label">推门进入</div>
         </button>
 
-        <div className="window-panel right" />
+        <div className="window-panel right">
+          <img className="poster" src="/textures/poster.jpg" alt="" />
+        </div>
       </div>
 
       <div className="sidewalk" />
